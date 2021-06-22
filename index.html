@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>簡体字⇔繁体字変換</title>
+    <meta name="viewport" content="width=device-width">
+    <style>
+      #contents,.inner {
+          width: 980px;
+          margin: 0 auto
+      }
+
+      .forms {
+          display: flex;
+          justify-content: space-between;
+      }
+      .forms .inner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-direction: column;
+          width: 48%;
+          height: auto;
+          margin: 0 0 20px
+      }
+      button {
+          margin: 5px auto;
+          border-style: solid;
+          border-width: 1px;
+          text-align: center
+      }
+
+      #form_jianti textarea, #form_fanti textarea{
+          width: 100%;
+      }
+      #ta_jianti {
+	  font-family:'Noto Sans SC','Microsoft YaHei','微软雅黑','SimSun',sans-serif;
+	  min-height:250px;
+      }
+      #ta_fanti {
+	  font-family:'Noto Sans TC','Microsoft JhengHei','微軟正黑體','PMingLiU',sans-serif;
+	  min-height:250px;
+      }
+    </style>
+    <script>
+      const byId = (q) => document.getElementById(q);
+      
+      function to_fanti() {
+          const from_text = byId("ta_jianti").value;
+          const to_area = byId("ta_fanti");
+          convert_and_set(from_text, to_area, false);
+      }
+      
+      function to_jianti() {
+          const from_text = byId("ta_fanti").value;
+          const to_area = byId("ta_jianti");
+          convert_and_set(from_text, to_area, true);
+      }
+
+      function convert_and_set(from_text, to_area, is_fj) {
+          const q = new URLSearchParams();
+          q.set("q", from_text);
+          q.set("is_fanjian", is_fj ? 1 : 0);
+          fetch("http://13.231.226.62:7000/?" + q.toString())
+              .then(response => response.json())
+              .then(res => {
+                  to_area.value = res.result;
+              })
+              .catch((err) => {
+                  to_area.value = err;
+              });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="contents">
+      <section>
+        <h2>簡体字⇔繁体字変換</h2>
+	<div class="forms">
+	  <form id="form_jianti" class="inner" action="javascript:void(0);">
+    	    <h3>簡体字</h3>
+    	    <textarea name="txt" id="ta_jianti" placeholder="簡体字を入力してください。"></textarea>
+            <button type="submit" onclick="to_fanti();">繁体字に変換</button>
+          </form>
+	  <form id="form_jianti" class="inner" action="javascript:void(0);">
+    	    <h3>繁体字</h3>
+    	    <textarea name="txt" id="ta_fanti" placeholder="繁体字を入力してください。"></textarea>
+            <button type="submit" onclick="to_jianti();">簡体字に変換</button>
+          </form>
+	</div>
+      </section>
+    </div>
+  </body>
+</html>
