@@ -64,7 +64,7 @@
           fetch("https://api.vocrf.net:7000/", {
               method: "POST",
               body: q
-               )
+          })
               .then(response => response.json())
               .then(res => {
                   to_area.value = res.result;
