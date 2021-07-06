@@ -61,7 +61,7 @@
           const q = new URLSearchParams();
           q.set("q", from_text);
           q.set("is_fanjian", is_fj ? 1 : 0);
-          fetch("https://api.vocrf.net:7000/", {
+          fetch("https://api.vocrf.net/", {
               method: "POST",
               body: q
           })
